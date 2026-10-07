@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quel est mon matelas idéal ? Diagnostic express en 1 minute | NOVA</title>
+<meta name="description" content="Diagnostic literie express et gratuit : quelques questions, un résumé clair en 1 minute, puis un rendez-vous avec un conseiller NOVA si vous le souhaitez.">
+<meta name="theme-color" content="#053B2F">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="NOVA">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Quel est mon matelas idéal ? Réponse en 1 minute">
+<meta property="og:description" content="Quelques questions, un résumé clair, et un conseiller NOVA si vous le souhaitez. Gratuit.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&amp;family=DM+Sans:wght@400;500;600&amp;display=swap">
+<noscript><style>[data-slot="start"]{display:none}</style></noscript>
+
+<!--
+  ============================================================================
+  « QUEL EST MON MATELAS IDÉAL ? » — VERSION EXPRESS — FICHIER UNIQUE
+  ============================================================================
+  Version courte du diagnostic complet (index.html) : 7 questions (8 à deux),
+  un résumé court, puis une demande de rendez-vous. Pas de fiche détaillée,
+  pas d'impression ni de PDF. Le diagnostic complet reste inchangé.
+
+  Identité : vert NOVA (site nova-ameublement.fr) poussé vers la nuit, menthe
+  pour les choix, Cormorant Garamond + DM Sans comme sur le site.
+  La scène (chambre vue de profil) se compose au fil des réponses : c'est le
+  seul élément animé de la page, et il ne bouge qu'en réponse à un choix.
+
+  Plan : 1. CONFIGURATION · 2. DESIGN / CSS · 3. QUESTIONS · 4. RÉSUMÉ
+         5. SCÈNE · 6. ÉCRANS · 7. DEMANDE DE RENDEZ-VOUS · 8. STATISTIQUES
+         9. DÉMARRAGE
+
+  Règles du résumé reprises du diagnostic complet (seuils V1 à valider) :
+  longueur = taille + 15 cm, 80 cm de large par personne à deux, longueur de
+  référence 200 cm pour un couple, matelas « ancien » à partir de 8 ans,
+  gabarit léger < 60 kg, capacité de charge à vérifier à partir de 100 kg.
+  ============================================================================
+-->
+
+<script>
+/* ===== 1. CONFIGURATION ==================================================== */
+
+// Formulaire Formspree déjà utilisé par le site NOVA et par le diagnostic complet.
+// Le champ « source » permet de reconnaître ces demandes dans votre boîte mail.
+const FORM_URL = "https://formspree.io/f/mzdonwgg";
+const LEAD_SOURCE = "diagnostic_express";
+
+const NOVA_SITE_URL = "https://nova-ameublement.fr/";
+const FALLBACK_CONTACT_URL = "https://nova-ameublement.fr/#contact";   // affiché si l'envoi échoue
+const FULL_DIAGNOSTIC_URL = "https://diagnostic.nova-ameublement.fr/"; // diagnostic complet (3 min)
+
+// Départements de la zone habituelle. Hors zone : la demande part quand même, marquée « hors zone ».
+const ZONE_DEPARTMENTS = ["37", "49", "86"];
+
+// Statistiques anonymes (GoatCounter), comme dans le diagnostic complet : rien n'est envoyé
+// tant que la valeur contient « REMPLACER ». Seuls des noms d'étapes sont comptés, jamais de réponse.
+const GOATCOUNTER_SITE = "REMPLACER_PAR_VOTRE_CODE_GOATCOUNTER";
+
+// Paramètres de campagne repris dans la demande de rendez-vous (pour savoir d'où vient le contact).
+const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+</script>
+
+<style>
+/* ===== 2. DESIGN / CSS ===================================================== */
+:root{
+  --nuit:#053B2F;      /* fond : le vert NOVA, de nuit */
+  --salle:#0A4A3B;     /* mur de la scène, surfaces */
+  --ligne:#1F6352;     /* filets, bordures */
+  --menthe:#5DCAA5;    /* choix, progression, appel à l'action */
+  --lin:#EEF5F1;       /* texte, draps */
+  --lin-soft:#C9DDD4;  /* texte secondaire */
+  --mousse:#9DC4B6;    /* texte discret */
+  --lampe:#F2C46B;     /* lumière de la lampe, aube */
+  --encre:#04231B;     /* texte sur menthe */
+  --erreur:#FFB3A1;
+  --serif:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
+  --sans:"DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--nuit);color:var(--lin);font-family:var(--sans);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+h1,h2{font-family:var(--serif);font-weight:500;margin:0;letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--menthe);text-underline-offset:3px}
+[hidden]{display:none !important}
+main:focus,[data-focus]:focus{outline:none}
+:focus-visible{outline:3px solid var(--lampe);outline-offset:3px;border-radius:10px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Cadre */
+.app{min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
+.topbar{width:100%;max-width:1180px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px}
+.logo{font-family:var(--serif);font-weight:600;font-size:25px;letter-spacing:.06em;color:var(--lin);display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:var(--menthe);flex:none}
+.prog{display:flex;align-items:center;gap:12px;font-size:14.5px;color:var(--mousse)}
+.dots{display:flex;gap:6px}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--ligne);transition:background .3s ease,transform .3s ease}
+.dots i.on{background:var(--menthe)}
+.dots i.now{background:var(--lin);transform:scale(1.25)}
+.layout{flex:1;width:100%;max-width:1180px;margin:0 auto;padding:0 20px 44px;display:grid;gap:24px;align-content:start}
+#view{min-width:0}
+
+/* Scène */
+.stage{margin:0;border-radius:26px;overflow:hidden;background:var(--salle);aspect-ratio:480/300;width:100%;transition:background 1.6s ease}
+.scene{display:block;width:100%;height:100%;overflow:visible}
+@media (min-width:900px){
+  .layout{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:60px;align-items:start;padding-bottom:60px}
+  .stage{position:sticky;top:20px;aspect-ratio:auto;height:min(76vh,600px)}
+  #view{padding-top:8px;max-width:34rem}
+}
+@media (max-width:899px){
+  .app[data-screen="rdv"] .stage{display:none}
+}
+
+/* éléments de la scène */
+.scene *{transition:opacity .6s ease}
+.glow,.d-dos,.d-cote,.d-ventre,.head,.d-made,.pillow2,.s2,.mat-sag,.breeze path,.dim,.dim-label,.ripple,.sun{opacity:0}
+.shade{transition:fill .4s ease}
+.lamp-on .glow{opacity:1}
+.lamp-on .shade{fill:var(--lampe)}
+.sky{transition:fill 1.6s ease}
+.sun{transform:translateY(46px);transition:transform 1.8s cubic-bezier(.2,.7,.2,1),opacity 1.2s ease}
+.sash{transform-box:fill-box;transform-origin:100% 50%;transition:transform .9s cubic-bezier(.3,.7,.2,1)}
+.curtain{transform-box:fill-box;transform-origin:50% 0}
+.bed{transform-origin:86px 0;transition:transform .7s cubic-bezier(.3,.7,.2,1)}
+.sleepers{transition:transform .7s cubic-bezier(.3,.7,.2,1)}
+.head{transform-box:fill-box;transition:opacity .6s ease,transform .7s ease}
+.duvets{transform-box:fill-box;transform-origin:50% 100%}
+.dim-label{font-family:var(--sans);font-size:12.5px;fill:var(--mousse)}
+
+/* lit fait tant que la position n'est pas connue */
+.stage[data-position=""] .d-made{opacity:1}
+.stage:not([data-position=""]) .head{opacity:1}
+.stage[data-position="dos"] .d-dos,
+.stage[data-position="cote"] .d-cote,
+.stage[data-position="ventre"] .d-ventre{opacity:1}
+.stage[data-position="cote"] .s1 .head{transform:translate(-2px,-4px)}
+.stage[data-position="ventre"] .s1 .head{transform:translate(0,4px)}
+.stage[data-position="variable"] .d-cote{animation:altA 7s ease-in-out infinite}
+.stage[data-position="variable"] .d-dos{animation:altB 7s ease-in-out infinite}
+@keyframes altA{0%,42%{opacity:1}50%,92%{opacity:0}100%{opacity:1}}
+@keyframes altB{0%,42%{opacity:0}50%,92%{opacity:1}100%{opacity:0}}
+.stage:not([data-position=""]) .s1 .duvets{animation:breathe 5.5s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.03)}}
+
+/* à deux */
+.stage[data-pourqui="couple"] .pillow2{opacity:1}
+.stage[data-pourqui="couple"]:not([data-position=""]) .s2{opacity:.75}
+
+/* accueil : on s'enfonce plus ou moins */
+.stage[data-accueil="enveloppante"] .sleepers{transform:translateY(5px)}
+.stage[data-accueil="intermediaire"] .sleepers{transform:translateY(2px)}
+.stage[data-accueil="ferme"] .sleepers{transform:translateY(-1px)}
+
+/* longueur */
+.stage[data-pourqui="solo"][data-taille="lt175"] .bed{transform:scaleX(.955)}
+.stage[data-taille="gt185"] .bed{transform:scaleX(1.035)}
+.stage[data-taille="lt175"] .dim,.stage[data-taille="175_185"] .dim,.stage[data-taille="gt185"] .dim,
+.stage[data-taille="lt175"] .dim-label,.stage[data-taille="175_185"] .dim-label,.stage[data-taille="gt185"] .dim-label{opacity:1}
+
+/* chaleur : la fenêtre s'ouvre, l'air circule */
+.stage[data-chaleur="souvent"] .sash{transform:scaleX(.16)}
+.stage[data-chaleur="parfois"] .sash{transform:scaleX(.55)}
+.stage[data-chaleur="souvent"] .breeze path{opacity:.85}
+.stage[data-chaleur="parfois"] .breeze .b1{opacity:.7}
+.breeze path{stroke-dasharray:34 180;animation:gust 3.4s linear infinite}
+.breeze .b2{animation-delay:-1.1s}.breeze .b3{animation-delay:-2.2s}
+@keyframes gust{from{stroke-dashoffset:214}to{stroke-dashoffset:0}}
+.stage[data-chaleur="souvent"] .curtain{animation:sway 3.4s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:skewX(0)}50%{transform:skewX(-7deg)}}
+
+/* matelas ancien : il se creuse */
+.stage[data-age="8_10"] .mat-sag,.stage[data-age="10_plus"] .mat-sag{opacity:1}
+.stage[data-age="8_10"] .mat-flat,.stage[data-age="10_plus"] .mat-flat{opacity:0}
+
+/* mouvements ressentis à deux */
+.stage.ripple-on .ripple{animation:ripple 1.3s ease-out 2}
+@keyframes ripple{0%{opacity:0;transform:translateY(4px)}30%{opacity:1}100%{opacity:0;transform:translateY(-6px)}}
+
+/* demande envoyée : le jour se lève */
+.stage[data-screen="done"]{background:#0E5545}
+.stage[data-screen="done"] .sky{fill:#F4D8A4}
+.stage[data-screen="done"] .moon,.stage[data-screen="done"] .star{opacity:0}
+.stage[data-screen="done"] .sun{opacity:1;transform:translateY(0)}
+.stage[data-screen="done"] .glow{opacity:0}
+.stage[data-screen="done"] .shade{fill:#2A6B5A}
+
+/* Boutons */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:0 30px;border-radius:999px;border:1.5px solid transparent;font-weight:600;font-size:17px;cursor:pointer;text-decoration:none;transition:background .2s ease,transform .12s ease}
+.btn:active{transform:scale(.985)}
+.btn-mint{background:var(--menthe);color:var(--encre)}
+.btn-mint:hover{background:#79D6B6}
+.btn-ghost{background:transparent;color:var(--lin);border-color:var(--ligne)}
+.btn-ghost:hover{border-color:var(--menthe)}
+.btn[disabled]{opacity:.65;cursor:wait}
+.btn-link{background:none;border:0;padding:8px 2px;min-height:44px;color:var(--lin-soft);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:15.5px}
+.back{background:none;border:0;cursor:pointer;color:var(--mousse);display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 12px 0 0;margin-left:-2px;font-size:15.5px}
+.back:hover{color:var(--lin)}
+
+/* Écrans */
+.fade{animation:fade .25s ease both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* Accueil */
+.hero h1{font-size:clamp(42px,10.4vw,66px);line-height:1;margin-bottom:18px}
+.hero .sub{font-size:18.5px;color:var(--lin-soft);max-width:26em}
+.hero .facts{margin-top:12px;color:var(--mousse);font-size:16px}
+.hero .btn{margin-top:26px;width:100%}
+@media (min-width:900px){.hero{padding-top:48px}.hero .btn{width:auto}}
+.fine{font-size:14px;color:var(--mousse);margin-top:16px;line-height:1.5}
+.foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--ligne);font-size:14px;color:var(--mousse);display:grid;gap:6px}
+
+/* Questions */
+.q-label{font-size:clamp(31px,7.6vw,44px);line-height:1.06;margin:4px 0 8px;max-width:15em}
+.q-help{color:var(--mousse);font-size:15.5px}
+.chips{display:grid;gap:10px;margin-top:20px}
+.chip{display:flex;align-items:center;gap:14px;width:100%;min-height:60px;padding:12px 18px;text-align:left;background:var(--salle);border:1.5px solid var(--ligne);border-radius:16px;cursor:pointer;font-size:17px;line-height:1.3;transition:border-color .15s,background .15s,color .15s}
+.chip:hover{border-color:var(--menthe)}
+.chip .ind{flex:0 0 22px;height:22px;border-radius:50%;border:1.5px solid var(--mousse);display:grid;place-items:center}
+.chip .txt{flex:1}
+.chip .hint{display:block;font-size:14.5px;color:var(--mousse);margin-top:2px}
+.chip[aria-checked="true"]{background:var(--menthe);border-color:var(--menthe);color:var(--encre)}
+.chip[aria-checked="true"] .hint{color:#0B3A2E}
+.chip[aria-checked="true"] .ind{border-color:var(--encre)}
+.chip[aria-checked="true"] .ind::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--encre)}
+.chip.subtle{background:transparent;border-style:dashed;color:var(--lin-soft)}
+.chip.subtle[aria-checked="true"]{color:var(--encre)}
+.next-row{margin-top:16px}
+.next-row .btn{width:100%}
+
+/* Résumé */
+.result h1{font-size:clamp(40px,9vw,58px);line-height:1;margin:4px 0 14px}
+.lead{font-family:var(--serif);font-weight:500;font-size:clamp(23px,5.4vw,28px);line-height:1.25}
+.note{margin-top:10px;color:var(--mousse);font-size:15.5px}
+.summary{margin:24px 0 0;border-top:1px solid var(--ligne)}
+.srow{display:grid;gap:2px;padding:15px 0;border-bottom:1px solid var(--ligne)}
+@media (min-width:520px){.srow{grid-template-columns:10.5rem minmax(0,1fr);gap:18px}}
+.srow dt{font-size:14.5px;color:var(--mousse);padding-top:5px;line-height:1.35}
+.srow dd{margin:0;font-family:var(--serif);font-weight:600;font-size:23px;line-height:1.2}
+.srow .sub{display:block;font-family:var(--sans);font-weight:400;font-size:15px;color:var(--lin-soft);margin-top:5px;line-height:1.45}
+.cta{margin-top:28px;background:var(--menthe);color:var(--encre);border-radius:26px;padding:28px 24px}
+.cta h2{font-size:clamp(29px,6.6vw,38px);line-height:1.04;font-weight:600;margin-bottom:10px}
+.cta p{color:#0B3A2E;margin-bottom:20px}
+.cta .btn{width:100%;background:var(--encre);color:var(--lin)}
+.cta .btn:hover{background:#0B3A2E}
+.cta .fine{color:#0B3A2E;text-align:center;margin:12px 0 0}
+.row-btns{display:flex;gap:4px 18px;flex-wrap:wrap;margin-top:14px}
+
+/* Demande de rendez-vous */
+.form h1{font-size:clamp(36px,8.4vw,52px);line-height:1;margin:4px 0 12px}
+.intro{color:var(--lin-soft)}
+.fgroup{margin:26px 0 0;border:0;padding:0;min-width:0}
+.fgroup legend{padding:0;font-weight:500;font-size:16.5px;margin-bottom:10px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{min-height:48px;padding:0 18px;border-radius:999px;border:1.5px solid var(--ligne);background:var(--salle);cursor:pointer;font-size:16px;transition:background .15s,border-color .15s,color .15s}
+.pill:hover{border-color:var(--menthe)}
+.pill[aria-checked="true"]{background:var(--menthe);border-color:var(--menthe);color:var(--encre)}
+.fields{display:grid;gap:14px;margin-top:26px}
+@media (min-width:520px){.fields{grid-template-columns:1fr 1fr}.fields .full{grid-column:1/-1}}
+.field label{display:block;font-weight:500;font-size:16px;margin-bottom:6px}
+.input{width:100%;min-height:54px;background:#042F25;border:1.5px solid var(--ligne);border-radius:14px;padding:0 16px;font-size:17px;color:var(--lin)}
+.input:focus{border-color:var(--menthe);outline:none;box-shadow:0 0 0 3px rgba(93,202,165,.25)}
+.input[aria-invalid="true"]{border-color:var(--erreur)}
+.zone-note{margin-top:10px;font-size:14.5px;color:var(--lin-soft)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.consent{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--lin-soft);margin-top:22px;cursor:pointer;line-height:1.45}
+.consent input{width:22px;height:22px;margin:1px 0 0;flex:0 0 auto;accent-color:var(--menthe)}
+.submit{margin-top:20px;width:100%}
+.status-msg{margin-top:12px;font-size:15px;min-height:1.5em;color:var(--erreur)}
+
+/* Confirmation */
+.done{padding-top:8px}
+.done h1{font-size:clamp(38px,8.8vw,56px);line-height:1;margin:4px 0 16px}
+.done p{color:var(--lin-soft);font-size:18px;margin-bottom:8px}
+.done .btn{margin-top:18px}
+
+@media (prefers-reduced-motion:reduce){
+  .scene *,.stage,.bed,.sleepers,.head,.sash,.sun,.dots i{transition:none !important}
+  .breeze path,.duvets,.curtain,.ripple,.d-cote,.d-dos,.fade{animation:none !important}
+  .stage[data-position="variable"] .d-cote{opacity:1}
+}
+</style>
+</head>
+
+<body>
+<div class="app" id="app" data-screen="landing">
+  <header class="topbar">
+    <a class="logo" href="https://nova-ameublement.fr/"><span class="logo-dot" aria-hidden="true"></span>NOVA</a>
+    <div class="prog" id="prog" hidden><span id="prog-text"></span><span class="dots" id="prog-dots" aria-hidden="true"></span></div>
+  </header>
+
+  <div class="layout">
+    <!-- SCÈNE : une chambre de nuit, vue de profil, qui se compose au fil des réponses (purement illustrative) -->
+    <figure class="stage" id="stage" data-screen="landing" data-pourqui="" data-taille="" data-position="" data-accueil="" data-chaleur="" data-age="" aria-hidden="true">
+      <svg class="scene" viewBox="0 0 480 300" preserveAspectRatio="xMidYMax meet" focusable="false">
+        <defs><clipPath id="win"><rect x="298" y="42" width="128" height="100" rx="4"/></clipPath></defs>
+        <!-- sol -->
+        <rect x="-600" y="262" width="1680" height="420" fill="#073A2E"/>
+        <!-- halo de la lampe -->
+        <g class="glow"><circle cx="40" cy="160" r="78" fill="#F2C46B" opacity=".06"/><circle cx="40" cy="160" r="46" fill="#F2C46B" opacity=".09"/></g>
+        <!-- fenêtre -->
+        <g clip-path="url(#win)">
+          <rect class="sky" x="298" y="42" width="128" height="100" fill="#06302A"/>
+          <circle class="sun" cx="362" cy="148" r="24" fill="#F7B955"/>
+          <g class="moon"><circle cx="398" cy="70" r="11" fill="#EEF5F1"/><circle class="sky" cx="404" cy="66" r="10" fill="#06302A"/></g>
+          <circle class="star" cx="320" cy="62" r="1.3" fill="#EEF5F1"/><circle class="star" cx="346" cy="98" r="1" fill="#EEF5F1"/><circle class="star" cx="384" cy="120" r="1.2" fill="#EEF5F1"/>
+        </g>
+        <rect x="298" y="42" width="128" height="100" rx="4" fill="none" stroke="#2A6B5A" stroke-width="4"/>
+        <line x1="362" y1="42" x2="362" y2="142" stroke="#2A6B5A" stroke-width="3"/>
+        <rect class="sash" x="362" y="44" width="62" height="96" fill="#0D5544" fill-opacity=".45" stroke="#3B8371" stroke-width="3" vector-effect="non-scaling-stroke"/>
+        <rect x="290" y="140" width="144" height="6" rx="2" fill="#2A6B5A"/>
+        <rect x="282" y="30" width="182" height="5" rx="2.5" fill="#2A6B5A"/>
+        <path class="curtain" d="M434 35 C 442 72, 430 112, 446 170 L 458 170 C 448 114, 458 72, 452 35 Z" fill="#1D6150"/>
+        <!-- l'air qui circule -->
+        <g class="breeze" fill="none" stroke="#BFE6D8" stroke-width="2" stroke-linecap="round">
+          <path class="b1" d="M300 88 C 276 82, 258 96, 232 90 C 214 86, 204 94, 186 92"/>
+          <path class="b2" d="M300 110 C 280 106, 262 118, 236 112 C 222 109, 214 114, 204 113"/>
+          <path class="b3" d="M300 66 C 284 62, 270 70, 250 66"/>
+        </g>
+        <!-- chevet et lampe -->
+        <rect x="12" y="206" width="54" height="56" rx="4" fill="#073A2E"/>
+        <line x1="18" y1="230" x2="60" y2="230" stroke="#1D6150" stroke-width="2"/>
+        <rect x="33" y="196" width="14" height="10" rx="2" fill="#1D6150"/>
+        <line x1="40" y1="172" x2="40" y2="196" stroke="#1D6150" stroke-width="3"/>
+        <path class="shade" d="M24 174 L56 174 L49 150 L31 150 Z" fill="#2A6B5A"/>
+        <!-- tête de lit -->
+        <rect x="70" y="138" width="18" height="124" rx="6" fill="#1D6150"/>
+        <!-- lit -->
+        <g class="bed">
+          <rect x="96" y="248" width="10" height="14" rx="2" fill="#16574A"/>
+          <rect x="420" y="248" width="10" height="14" rx="2" fill="#16574A"/>
+          <rect x="86" y="226" width="352" height="24" rx="5" fill="#16574A"/>
+          <g class="mat-flat">
+            <rect x="88" y="192" width="348" height="36" rx="10" fill="#A9D6C4"/>
+            <line x1="94" y1="207" x2="430" y2="207" stroke="#86C2AD" stroke-width="2"/>
+          </g>
+          <g class="mat-sag">
+            <path d="M88 202 Q88 192 98 192 L176 192 Q262 208 348 192 L426 192 Q436 192 436 202 L436 220 Q436 228 428 228 L96 228 Q88 228 88 220 Z" fill="#A9D6C4"/>
+            <path d="M94 208 L176 208 Q262 218 348 208 L430 208" fill="none" stroke="#86C2AD" stroke-width="2"/>
+          </g>
+          <rect class="pillow2" x="112" y="175" width="64" height="20" rx="10" fill="#C3E2D6"/>
+          <rect x="98" y="182" width="66" height="20" rx="10" fill="#EEF5F1"/>
+          <g class="d-made">
+            <path d="M292 208 L292 189 Q292 181 300 181 L428 181 Q436 181 436 189 L436 208 Q364 212 292 208 Z" fill="#EEF5F1"/>
+            <line x1="300" y1="193" x2="428" y2="193" stroke="#C3E2D6" stroke-width="2"/>
+          </g>
+          <g class="sleepers">
+            <g class="s s2" transform="translate(16 -8)">
+              <circle class="head" cx="146" cy="178" r="12" fill="#6FAE98"/>
+              <path class="d-dos" d="M158 208 L158 190 C 168 181, 196 178, 230 180 C 268 182, 300 185, 340 185 C 368 185, 388 176, 402 179 C 418 182, 430 189, 436 196 L436 208 Q298 212 158 208 Z" fill="#B5D9CB"/>
+              <path class="d-cote" d="M158 208 L158 186 C 166 173, 194 168, 220 172 C 240 175, 254 158, 284 157 C 312 156, 324 171, 344 172 C 368 173, 390 179, 408 186 C 422 190, 432 193, 436 197 L436 208 Q298 212 158 208 Z" fill="#B5D9CB"/>
+              <path class="d-ventre" d="M158 208 L158 193 C 172 187, 210 187, 250 187 C 290 187, 318 185, 346 187 C 380 189, 410 191, 436 197 L436 208 Q298 212 158 208 Z" fill="#B5D9CB"/>
+            </g>
+            <g class="s s1">
+              <circle class="head" cx="146" cy="178" r="12" fill="#8CC8B3"/>
+              <g class="duvets" fill="#EEF5F1" stroke="#C3E2D6" stroke-width="1.5">
+                <path class="d-dos" d="M158 208 L158 190 C 168 181, 196 178, 230 180 C 268 182, 300 185, 340 185 C 368 185, 388 176, 402 179 C 418 182, 430 189, 436 196 L436 208 Q298 212 158 208 Z"/>
+                <path class="d-cote" d="M158 208 L158 186 C 166 173, 194 168, 220 172 C 240 175, 254 158, 284 157 C 312 156, 324 171, 344 172 C 368 173, 390 179, 408 186 C 422 190, 432 193, 436 197 L436 208 Q298 212 158 208 Z"/>
+                <path class="d-ventre" d="M158 208 L158 193 C 172 187, 210 187, 250 187 C 290 187, 318 185, 346 187 C 380 189, 410 191, 436 197 L436 208 Q298 212 158 208 Z"/>
+              </g>
+            </g>
+          </g>
+          <g class="ripple" fill="none" stroke="#5DCAA5" stroke-width="2" stroke-linecap="round">
+            <path d="M262 150 q8 -8 16 0"/><path d="M255 142 q15 -13 30 0"/>
+          </g>
+          <g class="dim" stroke="#5DCAA5" stroke-width="1.5">
+            <line x1="88" y1="279" x2="436" y2="279"/><line x1="88" y1="273" x2="88" y2="285"/><line x1="436" y1="273" x2="436" y2="285"/>
+          </g>
+        </g>
+        <text class="dim-label" x="262" y="297" text-anchor="middle"></text>
+      </svg>
+    </figure>
+
+    <main id="view" tabindex="-1">
+      <!-- Accueil : présent dès le chargement (moteurs de recherche, lecteurs sans JavaScript). -->
+      <section class="hero">
+        <h1 tabindex="-1" data-focus>Quel est mon matelas idéal&nbsp;?</h1>
+        <p class="sub">Répondez en quelques touches&nbsp;: votre lit se dessine au fil des réponses, puis un résumé clair s’affiche.</p>
+        <p class="facts">Gratuit, environ une minute, sans laisser vos coordonnées.</p>
+        <div data-slot="start"><button type="button" class="btn btn-mint" data-action="start">Commencer le diagnostic</button></div>
+        <p class="fine">Aucune marque imposée. Vos réponses restent sur votre appareil, sauf si vous demandez un rendez-vous. Ce diagnostic ne constitue pas un avis médical.</p>
+        <noscript><p class="fine">Le questionnaire a besoin de JavaScript pour fonctionner. Vous pouvez l’activer dans votre navigateur, ou contacter NOVA directement sur <a href="https://nova-ameublement.fr/">nova-ameublement.fr</a>.</p></noscript>
+        <footer class="foot">
+          <span><a href="https://nova-ameublement.fr/">NOVA</a>, conseil en ameublement et literie dans les départements 49, 37 et 86.</span>
+          <span>Envie de plus de détails&nbsp;? <a href="https://diagnostic.nova-ameublement.fr/">Faire le diagnostic complet</a>, en 3 minutes.</span>
+        </footer>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script>
+/* ===== 3. QUESTIONS ======================================================== */
+/* Une question par écran, une réponse en un tap. « onlyCouple » : posée seulement à deux. */
+
+const NBSP = " ";
+const QUESTIONS = [
+  { id: "pourqui", label: "Pour qui choisissez-vous votre literie" + NBSP + "?",
+    options: [
+      { v: "solo",   t: "Pour moi seul(e)" },
+      { v: "couple", t: "Pour deux personnes", h: "Un couple qui dort dans le même lit" }
+    ] },
+  { id: "taille",
+    label: function (a) { return a.pourqui === "couple" ? "Quelle est la taille du plus grand des deux" + NBSP + "?" : "Quelle est votre taille" + NBSP + "?"; },
+    help: "Elle sert à choisir la longueur du lit.",
+    options: [
+      { v: "lt175",   t: "Moins de 1,75 m" },
+      { v: "175_185", t: "Entre 1,75 m et 1,85 m" },
+      { v: "gt185",   t: "Plus de 1,85 m" },
+      { v: "nsp",     t: "Je ne sais pas" }
+    ] },
+  { id: "position", label: "Dans quelle position dormez-vous le plus souvent" + NBSP + "?",
+    options: [
+      { v: "cote",     t: "Sur le côté" },
+      { v: "dos",      t: "Sur le dos" },
+      { v: "ventre",   t: "Sur le ventre" },
+      { v: "variable", t: "Ça change beaucoup" }
+    ] },
+  { id: "gabarit", label: "Pour mieux cibler le soutien, où vous situez-vous à peu près" + NBSP + "?",
+    help: "Facultatif : vous pouvez ne pas répondre.",
+    options: [
+      { v: "w1",    t: "Moins de 60 kg" },
+      { v: "w2",    t: "Entre 60 et 100 kg" },
+      { v: "w3",    t: "Plus de 100 kg" },
+      { v: "refus", t: "Je préfère ne pas répondre", subtle: true }
+    ] },
+  { id: "accueil", label: "Quand vous vous allongez, quelle sensation préférez-vous" + NBSP + "?",
+    options: [
+      { v: "enveloppante",  t: "Enveloppante", h: "On s'enfonce un peu" },
+      { v: "intermediaire", t: "Intermédiaire" },
+      { v: "ferme",         t: "Ferme", h: "On reste sur le dessus" },
+      { v: "nsp",           t: "Je ne sais pas" }
+    ] },
+  { id: "chaleur", label: "Vous arrive-t-il d'avoir trop chaud la nuit" + NBSP + "?",
+    options: [
+      { v: "souvent",  t: "Souvent" },
+      { v: "parfois",  t: "Parfois" },
+      { v: "rarement", t: "Rarement ou jamais" }
+    ] },
+  { id: "mouvements", onlyCouple: true, label: "Êtes-vous gêné(e) par les mouvements de l'autre dans le lit" + NBSP + "?",
+    options: [
+      { v: "oui",    t: "Oui, assez souvent" },
+      { v: "un_peu", t: "Un peu" },
+      { v: "non",    t: "Non" }
+    ] },
+  { id: "age", label: "Quel âge a votre matelas actuel, à peu près" + NBSP + "?",
+    options: [
+      { v: "lt3",     t: "Moins de 3 ans" },
+      { v: "3_7",     t: "3 à 7 ans" },
+      { v: "8_10",    t: "8 à 10 ans" },
+      { v: "10_plus", t: "Plus de 10 ans" },
+      { v: "nsp",     t: "Je ne sais pas" }
+    ] }
+];
+
+/* Choix du formulaire de rendez-vous */
+const LIEUX  = [ { v: "domicile", t: "Chez moi" }, { v: "magasin", t: "En magasin" }, { v: "nsp", t: "Je ne sais pas encore" } ];
+const RAPPEL = [ { v: "journee", t: "En journée" }, { v: "soiree", t: "En soirée" }, { v: "samedi", t: "Le samedi" } ];
+
+
+/* ===== 4. RÉSUMÉ =========================================================== */
+/* Court par principe : une phrase, puis 4 à 6 lignes. Aucun produit, aucune marque. */
+
+const POSITION_PHRASE = { cote: "sur le côté", dos: "sur le dos", ventre: "sur le ventre", variable: "dans des positions variées" };
+
+function buildSummary(a) {
+  var couple = a.pourqui === "couple", rows = [];
+
+  var acc = { enveloppante: "un accueil plutôt enveloppant", intermediaire: "un accueil intermédiaire", ferme: "un accueil plutôt ferme" }[a.accueil];
+  var headline = "Vous dormez " + (POSITION_PHRASE[a.position] || "dans des positions variées") + (acc ? " et préférez " + acc : "") + ".";
+  if (a.chaleur === "souvent") headline += " La fraîcheur compte beaucoup pour vous.";
+  var note = couple ? "Les besoins de votre partenaire se précisent avec le conseiller, puis à l'essai à deux." : "";
+
+  var ACC = { enveloppante: "Plutôt enveloppant", intermediaire: "Intermédiaire", ferme: "Plutôt ferme" };
+  rows.push({ label: "Accueil", value: ACC[a.accueil] || "À découvrir à l'essai",
+    sub: ACC[a.accueil] ? "" : "La sensation qui vous convient se précisera en essayant." });
+
+  /* Point clé de l'essai, selon la position (règles A-01 à A-04 du diagnostic complet) */
+  var POS = {
+    cote:     "L'accueil des épaules et des hanches",
+    dos:      "Le maintien du bassin et des lombaires",
+    ventre:   "Le maintien du bassin, sans enfoncement excessif",
+    variable: "La polyvalence du matelas selon vos positions"
+  };
+  var sub = "";
+  if (a.gabarit === "w3") sub = "Avec votre gabarit, vérifiez aussi la capacité de charge annoncée par le fabricant.";
+  else if (a.gabarit === "w1" && a.position === "cote") sub = "Avec un gabarit plutôt léger, c'est le point le plus important à vérifier.";
+  rows.push({ label: "À vérifier en priorité à l'essai", value: POS[a.position] || POS.variable, sub: sub });
+
+  var d = dimensionOf(a);
+  rows.push({ label: "Dimension à envisager", value: d.value, sub: d.sub });
+
+  var HEAT = { souvent: "Prioritaire", parfois: "À prendre en compte", rarement: "Secondaire" };
+  rows.push({ label: "Fraîcheur la nuit", value: HEAT[a.chaleur] || "À préciser",
+    sub: a.chaleur === "souvent" ? "Privilégiez une literie qui laisse bien circuler l'air." : "" });
+
+  if (couple) {
+    var IND = { oui: "Importante", un_peu: "À prendre en compte", non: "Secondaire" };
+    rows.push({ label: "Indépendance de couchage", value: IND[a.mouvements] || "À préciser à l'essai, à deux",
+      sub: a.mouvements === "oui" ? "Pour moins ressentir les mouvements de l'autre." : "" });
+  }
+
+  if (a.age === "8_10" || a.age === "10_plus") {
+    rows.push({ label: "Votre matelas actuel", value: a.age === "10_plus" ? "Plus de 10 ans" : "8 à 10 ans",
+      sub: "Son état mérite d'être regardé avec un conseiller." });
+  }
+
+  return { headline: headline, note: note, rows: rows };
+}
+
+/* Longueur = taille + 15 cm, arrondie à 190 ou 200 ; au-delà : hors standard.
+   À deux : 80 cm par personne (160) et longueur de référence 200 cm. */
+function dimensionOf(a) {
+  var t = a.taille;
+  if (a.pourqui === "couple") {
+    if (t === "gt185") return { value: "160 cm de large, plus de 200 cm de long", sub: "Une longueur hors standard est à étudier. 180 cm de large si la chambre le permet." };
+    if (t === "nsp")   return { value: "160 cm de large", sub: "La longueur se choisit selon la taille du plus grand des deux. 180 cm de large si la chambre le permet." };
+    return { value: "160 × 200 cm", sub: "Soit 80 cm de large par personne. 180 cm si la chambre le permet." };
+  }
+  if (t === "lt175")   return { value: "90 × 190 cm au minimum", sub: "140 cm de large pour plus d'aisance, si la chambre le permet." };
+  if (t === "175_185") return { value: "90 × 200 cm au minimum", sub: "140 cm de large pour plus d'aisance, si la chambre le permet." };
+  if (t === "gt185")   return { value: "90 cm de large, plus de 200 cm de long", sub: "Une longueur hors standard est à étudier." };
+  return { value: "90 cm de large au minimum", sub: "La longueur se choisit selon votre taille : 190 ou 200 cm." };
+}
+
+
+/* ===== 5. SCÈNE ============================================================ */
+/* La scène lit les réponses (attributs data-*) ; tout le reste est en CSS (section 2). */
+
+var stageEl;
+function lengthLabel(a) {
+  if (a.taille === "lt175") return a.pourqui === "couple" ? "200 cm de long" : "190 cm de long";
+  if (a.taille === "175_185") return "200 cm de long";
+  if (a.taille === "gt185") return "plus de 200 cm de long";
+  return "";
+}
+function updateScene() {
+  if (!stageEl) return;
+  stageEl.setAttribute("data-screen", current.s);
+  ["pourqui", "taille", "position", "accueil", "chaleur", "age"].forEach(function (k) { stageEl.setAttribute("data-" + k, A[k] || ""); });
+  var lab = stageEl.querySelector(".dim-label"); if (lab) lab.textContent = lengthLabel(A);
+}
+function pulseRipple() {
+  if (!stageEl) return;
+  stageEl.classList.remove("ripple-on"); void stageEl.getBoundingClientRect();
+  stageEl.classList.add("ripple-on");
+  setTimeout(function () { stageEl.classList.remove("ripple-on"); }, 2800);
+}
+
+
+/* ===== 6. ÉCRANS =========================================================== */
+
+var appEl, viewEl, progEl, LANDING_HTML, current = { s: "landing" };
+var A = {};                                   // réponses (en mémoire seulement)
+var RDV = { lieu: "", rappel: [], prenom: "", tel: "", cp: "", consent: false };
+var BUSY = false, SENDING = false, SENT = false;
+var REDUCED = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+var ICON_BACK = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11 3.5L5.5 9l5.5 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function questions() { return QUESTIONS.filter(function (q) { return !q.onlyCouple || A.pourqui === "couple"; }); }
+function labelOf(q) { return typeof q.label === "function" ? q.label(A) : q.label; }
+function optText(list, v) { for (var i = 0; i < list.length; i++) if (list[i].v === v) return list[i].t; return ""; }
+function firstMissing() { var qs = questions(); for (var i = 0; i < qs.length; i++) if (!A[qs[i].id]) return i; return -1; }
+function isComplete() { return firstMissing() === -1; }
+
+function render(s) {
+  /* garde-fous : on ne montre jamais un écran qui n'a pas de sens (retour arrière du navigateur) */
+  if (s.s === "q") { var n = questions().length; if (s.i >= n) s = { s: "result" }; else if (s.i > 0 && firstMissing() !== -1 && firstMissing() < s.i) s = { s: "q", i: firstMissing() }; }
+  if ((s.s === "result" || s.s === "rdv") && !isComplete()) s = { s: "q", i: Math.max(0, firstMissing()) };
+  if (s.s === "rdv" && SENT) s = { s: "done" };
+  if (s.s === "done" && !SENT) s = { s: "result" };
+  current = s;
+  var h = "";
+  if (s.s === "landing") h = LANDING_HTML;
+  else if (s.s === "q") h = questionHtml(s.i);
+  else if (s.s === "result") h = resultHtml();
+  else if (s.s === "rdv") h = rdvHtml();
+  else if (s.s === "done") h = doneHtml();
+  viewEl.innerHTML = h;
+  appEl.setAttribute("data-screen", s.s);
+  updateProgress();
+  updateScene();
+  if (s.s !== "landing" || window.scrollY > 0) window.scrollTo(0, 0);
+  var f = viewEl.querySelector("[data-focus]");
+  if (f && s.s !== "landing") { try { f.focus({ preventScroll: true }); } catch (e) { f.focus(); } }
+}
+function go(s, replace) {
+  try { if (replace) window.history.replaceState(s, ""); else window.history.pushState(s, ""); } catch (e) { /* ignore */ }
+  render(s);
+}
+
+function updateProgress() {
+  if (current.s !== "q") { progEl.hidden = true; return; }
+  var n = questions().length, i = current.i, d = "";
+  for (var k = 0; k < n; k++) d += '<i class="' + (k < i ? "on" : (k === i ? "now" : "")) + '"></i>';
+  document.getElementById("prog-text").textContent = (i + 1) + " sur " + n;
+  document.getElementById("prog-dots").innerHTML = d;
+  progEl.hidden = false;
+}
+
+function questionHtml(i) {
+  var qs = questions(), q = qs[i], sel = A[q.id];
+  return '<section class="step fade" aria-labelledby="lbl-' + q.id + '">' +
+    '<button type="button" class="back" data-action="back">' + ICON_BACK + (i === 0 ? "Accueil" : "Question précédente") + '</button>' +
+    '<h1 class="q-label" id="lbl-' + q.id + '" tabindex="-1" data-focus>' + esc(labelOf(q)) + '</h1>' +
+    (q.help ? '<p class="q-help">' + esc(q.help) + '</p>' : "") +
+    '<div class="chips" role="radiogroup" aria-labelledby="lbl-' + q.id + '">' +
+    q.options.map(function (o) {
+      return '<button type="button" class="chip' + (o.subtle ? " subtle" : "") + '" role="radio" aria-checked="' + (sel === o.v ? "true" : "false") +
+        '" data-action="pick" data-q="' + q.id + '" data-v="' + esc(o.v) + '"><span class="ind" aria-hidden="true"></span><span class="txt">' +
+        esc(o.t) + (o.h ? '<span class="hint">' + esc(o.h) + '</span>' : "") + '</span></button>';
+    }).join("") + '</div>' +
+    (sel ? '<div class="next-row"><button type="button" class="btn btn-ghost" data-action="next">Garder cette réponse</button></div>' : "") +
+    '</section>';
+}
+
+function onPick(btn) {
+  if (BUSY) return;
+  var qid = btn.getAttribute("data-q"), v = btn.getAttribute("data-v");
+  A[qid] = v;
+  if (qid === "pourqui" && v !== "couple") delete A.mouvements;
+  var group = btn.parentNode.querySelectorAll(".chip");
+  for (var k = 0; k < group.length; k++) group[k].setAttribute("aria-checked", group[k] === btn ? "true" : "false");
+  updateScene();                                         // la scène réagit tout de suite
+  if (qid === "mouvements" && v !== "non") pulseRipple();
+  BUSY = true;
+  setTimeout(function () { BUSY = false; nextFrom(qid); }, REDUCED ? 120 : 700);   // le temps de voir la scène changer
+}
+function nextFrom(qid) {
+  var qs = questions(), i = 0;
+  for (var k = 0; k < qs.length; k++) if (qs[k].id === qid) i = k;
+  if (i + 1 < qs.length) go({ s: "q", i: i + 1 });
+  else { track("express_completed"); go({ s: "result" }); }
+}
+
+function resultHtml() {
+  var S = buildSummary(A);
+  return '<article class="result fade">' +
+    '<h1 tabindex="-1" data-focus>Votre profil literie</h1>' +
+    '<p class="lead">' + esc(S.headline) + '</p>' +
+    (S.note ? '<p class="note">' + esc(S.note) + '</p>' : "") +
+    '<dl class="summary">' + S.rows.map(function (r) {
+      return '<div class="srow"><dt>' + esc(r.label) + '</dt><dd>' + esc(r.value) + (r.sub ? '<span class="sub">' + esc(r.sub) + '</span>' : "") + '</dd></div>';
+    }).join("") + '</dl>' +
+    '<p class="fine">Le choix final se confirme à l’essai, avec un conseiller. Ce résumé ne désigne aucun produit et ne constitue pas un avis médical.</p>' +
+    '<section class="cta" aria-labelledby="cta-title">' +
+    '<h2 id="cta-title">Passons à l’essai, avec un conseiller NOVA</h2>' +
+    '<p>Un conseiller vous rappelle pour faire le point sur votre profil et fixer un rendez-vous, chez vous ou en magasin.</p>' +
+    '<button type="button" class="btn" data-action="rdv">Prendre rendez-vous</button>' +
+    '<p class="fine">L’appel est gratuit et sans engagement.</p></section>' +
+    '<div class="row-btns"><button type="button" class="btn-link" data-action="edit">Modifier mes réponses</button>' +
+    '<button type="button" class="btn-link" data-action="restart">Recommencer</button></div>' +
+    '</article>';
+}
+
+
+/* ===== 7. DEMANDE DE RENDEZ-VOUS =========================================== */
+/* Seul moment où des coordonnées sont demandées, avec consentement explicite.
+   Le rendez-vous lui-même est fixé ensuite par téléphone, avec le conseiller.  */
+
+function pillGroup(key, legend, multi, list) {
+  return '<fieldset class="fgroup"><legend>' + esc(legend) + '</legend><div class="pills" role="' + (multi ? "group" : "radiogroup") + '">' +
+    list.map(function (o) {
+      var on = multi ? RDV[key].indexOf(o.v) !== -1 : RDV[key] === o.v;
+      return '<button type="button" class="pill" role="' + (multi ? "checkbox" : "radio") + '" aria-checked="' + (on ? "true" : "false") +
+        '" data-action="pill" data-k="' + key + '" data-v="' + esc(o.v) + '"' + (multi ? ' data-multi="1"' : "") + '>' + esc(o.t) + '</button>';
+    }).join("") + '</div></fieldset>';
+}
+function field(k, label, type, attrs, full) {
+  return '<div class="field' + (full ? " full" : "") + '"><label for="f-' + k + '">' + esc(label) + '</label>' +
+    '<input class="input" id="f-' + k + '" type="' + type + '" data-f="' + k + '" value="' + esc(RDV[k] || "") + '" ' + attrs + '></div>';
+}
+
+function rdvHtml() {
+  return '<section class="form fade">' +
+    '<button type="button" class="back" data-action="back">' + ICON_BACK + 'Mon résumé</button>' +
+    '<h1 tabindex="-1" data-focus>Votre rendez-vous</h1>' +
+    '<p class="intro">Laissez vos coordonnées : un conseiller NOVA vous rappelle pour fixer le rendez-vous avec vous. Votre résumé lui est transmis, inutile de tout réexpliquer.</p>' +
+    pillGroup("lieu", "Où préférez-vous le rendez-vous" + NBSP + "?", false, LIEUX) +
+    pillGroup("rappel", "Quand préférez-vous être rappelé(e)" + NBSP + "?", true, RAPPEL) +
+    '<div class="fields">' +
+      field("prenom", "Prénom", "text", 'autocomplete="given-name" maxlength="40"', true) +
+      field("tel", "Téléphone", "tel", 'autocomplete="tel" inputmode="tel" maxlength="20"') +
+      field("cp", "Code postal", "text", 'autocomplete="postal-code" inputmode="numeric" maxlength="5"') +
+    '</div>' +
+    '<p class="zone-note" data-zone' + (zoneNoteVisible(RDV.cp) ? "" : " hidden") + '>Ce code postal est en dehors de nos départements habituels (49, 37 et 86). Envoyez quand même votre demande : nous verrons ce qui est possible.</p>' +
+    '<div class="hp" aria-hidden="true"><label>Ne pas remplir <input type="text" data-hp tabindex="-1" autocomplete="off"></label></div>' +
+    '<label class="consent"><input type="checkbox" data-consent' + (RDV.consent ? " checked" : "") + '><span>J’accepte que NOVA me recontacte au sujet de mon projet literie. Mes coordonnées et mon résumé ne servent qu’à cela.</span></label>' +
+    '<button type="button" class="btn btn-mint submit" data-action="send">Envoyer ma demande</button>' +
+    '<p class="status-msg" data-status aria-live="polite"></p>' +
+    '<p class="fine">L’appel est gratuit et sans engagement. Le conseiller vous présente le déroulé du rendez-vous avant toute confirmation.</p>' +
+    '</section>';
+}
+
+function inZone(cp) { return /^\d{5}$/.test(cp || "") && ZONE_DEPARTMENTS.indexOf(String(cp).slice(0, 2)) !== -1; }
+function zoneNoteVisible(cp) { return /^\d{5}$/.test(cp || "") && !inZone(cp); }
+
+function onPill(btn) {
+  var k = btn.getAttribute("data-k"), v = btn.getAttribute("data-v"), multi = btn.hasAttribute("data-multi");
+  if (multi) {
+    var i = RDV[k].indexOf(v);
+    if (i === -1) RDV[k].push(v); else RDV[k].splice(i, 1);
+    btn.setAttribute("aria-checked", i === -1 ? "true" : "false");
+  } else {
+    RDV[k] = RDV[k] === v ? "" : v;
+    var group = btn.parentNode.querySelectorAll(".pill");
+    for (var j = 0; j < group.length; j++) group[j].setAttribute("aria-checked", group[j] === btn && RDV[k] === v ? "true" : "false");
+  }
+}
+
+function onSend() {
+  if (SENDING) return;
+  var st = viewEl.querySelector("[data-status]"), btn = viewEl.querySelector('[data-action="send"]');
+  var prenom = (RDV.prenom || "").trim(), tel = (RDV.tel || "").trim(), cp = (RDV.cp || "").trim();
+  var missing = [];
+  ["prenom", "tel", "cp"].forEach(function (k) { var el = viewEl.querySelector('[data-f="' + k + '"]'); if (el) el.removeAttribute("aria-invalid"); });
+  if (!prenom) missing.push(["prenom", "votre prénom"]);
+  if (tel.replace(/\D/g, "").length < 10) missing.push(["tel", "un numéro de téléphone complet"]);
+  if (!/^\d{5}$/.test(cp)) missing.push(["cp", "votre code postal (5 chiffres)"]);
+  if (missing.length) {
+    missing.forEach(function (m) { var el = viewEl.querySelector('[data-f="' + m[0] + '"]'); if (el) el.setAttribute("aria-invalid", "true"); });
+    st.textContent = "Indiquez " + joinList(missing.map(function (m) { return m[1]; })) + ".";
+    var first = viewEl.querySelector('[data-f="' + missing[0][0] + '"]'); if (first) first.focus();
+    return;
+  }
+  if (!RDV.consent) { st.textContent = "Cochez la case pour que nous puissions vous rappeler."; return; }
+  var hp = viewEl.querySelector("[data-hp]");
+  if (hp && hp.value) { SENT = true; go({ s: "done" }, true); return; }   // robot : on n'envoie rien
+
+  SENDING = true; st.textContent = "";
+  if (btn) { btn.disabled = true; btn.textContent = "Envoi…"; }
+  fetch(FORM_URL, { method: "POST", headers: { "Accept": "application/json", "Content-Type": "application/json" }, body: JSON.stringify(buildPayload()) })
+    .then(function (res) {
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      SENDING = false; SENT = true;
+      track("rdv_request");
+      go({ s: "done" }, true);
+    })
+    .catch(function () {
+      SENDING = false;
+      if (btn) { btn.disabled = false; btn.textContent = "Envoyer ma demande"; }
+      st.innerHTML = "La demande n’est pas partie (connexion interrompue). Réessayez, ou écrivez-nous depuis " +
+        '<a href="' + esc(FALLBACK_CONTACT_URL) + '">le formulaire de contact NOVA</a>.';
+    });
+}
+
+function buildPayload() {
+  var S = buildSummary(A);
+  var p = {
+    _subject: "Demande de rendez-vous — Diagnostic express literie",
+    source: LEAD_SOURCE,
+    prenom: RDV.prenom.trim(),
+    telephone: RDV.tel.trim(),
+    code_postal: RDV.cp.trim(),
+    zone: inZone(RDV.cp) ? "Départements 49, 37, 86" : "Hors zone commerciale actuelle",
+    lieu_souhaite: optText(LIEUX, RDV.lieu) || "Non précisé",
+    rappel_prefere: RDV.rappel.map(function (v) { return optText(RAPPEL, v); }).join(", ") || "Non précisé",
+    resume: [S.headline].concat(S.note ? [S.note] : []).concat(S.rows.map(function (r) { return r.label + " : " + r.value + (r.sub ? " — " + r.sub : ""); })).join("\n"),
+    reponses: questions().filter(function (q) { return q.id !== "gabarit"; }).map(function (q) {
+      return labelOf(q).replace(/ \?$/, "") + " : " + optText(q.options, A[q.id]);
+    }).join("\n"),
+    consentement: "oui",
+    page: window.location.origin + window.location.pathname,
+    date: new Date().toISOString()
+  };
+  UTM_KEYS.forEach(function (k) { if (ATTR[k]) p[k] = ATTR[k]; });
+  if (ATTR.referrer_host) p.provenance = ATTR.referrer_host;
+  return p;
+}
+
+function doneHtml() {
+  return '<section class="done fade">' +
+    '<h1 tabindex="-1" data-focus>Merci ' + esc(RDV.prenom.trim()) + ', votre demande est envoyée.</h1>' +
+    '<p>Un conseiller NOVA vous rappelle au ' + esc(RDV.tel.trim()) + ' pour convenir du rendez-vous.</p>' +
+    '<p>Votre résumé lui a été transmis.</p>' +
+    '<button type="button" class="btn btn-ghost" data-action="see-result">Revoir mon résumé</button>' +
+    '<p class="fine"><a href="' + esc(NOVA_SITE_URL) + '">Découvrir NOVA</a></p>' +
+    '</section>';
+}
+
+
+/* ===== 8. STATISTIQUES ===================================================== */
+/* Aucune réponse ni coordonnée : seulement le nom de l'étape (express_view, express_start,
+   express_completed, rdv_open, rdv_request), pour mesurer le taux de conversion.
+   Inactif tant que GOATCOUNTER_SITE n'est pas configuré (CONFIGURATION).                        */
+
+var ATTR = {};
+function cleanParam(v) { return String(v).replace(/[^\w\-.~ %+:\/]/g, "").slice(0, 100); }
+function captureAttribution() {
+  var out = {};
+  try { var params = new URLSearchParams(window.location.search); UTM_KEYS.forEach(function (k) { var v = params.get(k); if (v) out[k] = cleanParam(v); }); } catch (e) { /* ignore */ }
+  try { var rh = document.referrer ? new URL(document.referrer).hostname : ""; if (rh && rh !== window.location.hostname) out.referrer_host = rh; } catch (e) { /* ignore */ }
+  return out;
+}
+function isLocalContext() {
+  var h = window.location.hostname, p = window.location.protocol;
+  return p === "file:" || h === "localhost" || h === "127.0.0.1" || h === "[::1]" || h === "";
+}
+function isGoatConfigured() { return !!GOATCOUNTER_SITE && !/REMPLACER/i.test(GOATCOUNTER_SITE); }
+var goatLoaded = false;
+function track(name) {
+  if (!isGoatConfigured() || isLocalContext()) return;
+  if (!goatLoaded) {
+    goatLoaded = true;
+    var s = document.createElement("script");
+    s.async = true; s.src = "https://gc.zgo.at/count.js";
+    s.setAttribute("data-goatcounter", "https://" + GOATCOUNTER_SITE + ".goatcounter.com/count");
+    s.setAttribute("data-goatcounter-settings", '{"no_onload": true}');
+    document.head.appendChild(s);
+  }
+  var send = function () { if (window.goatcounter && typeof window.goatcounter.count === "function") window.goatcounter.count({ path: name, event: true }); };
+  if (window.goatcounter && window.goatcounter.count) send(); else setTimeout(send, 800);
+}
+
+
+/* ===== 9. DÉMARRAGE ======================================================== */
+
+function esc(s) {
+  return String(s === undefined || s === null ? "" : s).replace(/[&<>"']/g, function (c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  });
+}
+function joinList(list) { return list.length <= 1 ? list.join("") : list.slice(0, -1).join(", ") + " et " + list[list.length - 1]; }
+
+function init() {
+  appEl = document.getElementById("app");
+  viewEl = document.getElementById("view");
+  progEl = document.getElementById("prog");
+  stageEl = document.getElementById("stage");
+  LANDING_HTML = viewEl.innerHTML;
+  ATTR = captureAttribution();
+  track("express_view");
+  try { window.history.replaceState({ s: "landing" }, ""); } catch (e) { /* ignore */ }
+  window.addEventListener("popstate", function (e) { render(e.state && e.state.s ? e.state : { s: "landing" }); });
+
+  /* le seul moment non provoqué par un choix : la lampe s'allume à l'arrivée */
+  setTimeout(function () { stageEl.classList.add("lamp-on"); }, REDUCED ? 0 : 650);
+
+  viewEl.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("[data-action]") : null;
+    if (!b) return;
+    var a = b.getAttribute("data-action");
+    if (a === "start") { track("express_start"); go({ s: "q", i: 0 }); }
+    else if (a === "pick") onPick(b);
+    else if (a === "next") { var q = questions()[current.i]; if (q) nextFrom(q.id); }
+    else if (a === "back") window.history.back();
+    else if (a === "rdv") { track("rdv_open"); go({ s: "rdv" }); }
+    else if (a === "pill") onPill(b);
+    else if (a === "send") onSend();
+    else if (a === "edit") go({ s: "q", i: 0 });
+    else if (a === "restart") { A = {}; go({ s: "q", i: 0 }); }
+    else if (a === "see-result") go({ s: "result" });
+  });
+  viewEl.addEventListener("input", function (e) {
+    var k = e.target.getAttribute && e.target.getAttribute("data-f");
+    if (!k) return;
+    if (k === "cp") { e.target.value = e.target.value.replace(/\D/g, "").slice(0, 5); }
+    RDV[k] = e.target.value;
+    e.target.removeAttribute("aria-invalid");
+    if (k === "cp") { var z = viewEl.querySelector("[data-zone]"); if (z) z.hidden = !zoneNoteVisible(RDV.cp); }
+  });
+  viewEl.addEventListener("change", function (e) {
+    if (e.target.hasAttribute && e.target.hasAttribute("data-consent")) RDV.consent = e.target.checked;
+  });
+  viewEl.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && e.target.getAttribute && e.target.getAttribute("data-f")) { e.preventDefault(); onSend(); }
+  });
+}
+init();
+</script>
+</body>
+</html>
