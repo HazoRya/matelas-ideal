@@ -12,9 +12,20 @@
 <meta property="og:locale" content="fr_FR">
 <meta property="og:title" content="Quel est mon matelas idéal ? Réponse en 1 minute">
 <meta property="og:description" content="Quelques questions, un résumé clair, et un conseiller NOVA si vous le souhaitez. Gratuit.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&amp;family=DM+Sans:wght@400;500;600&amp;display=swap">
+<meta property="og:url" content="https://diagnostic.nova-ameublement.fr/express.html">
+<meta property="og:image" content="https://diagnostic.nova-ameublement.fr/apercu-express.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Une chambre de nuit avec un lit, et la question : Quel est mon matelas idéal ?">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://diagnostic.nova-ameublement.fr/apercu-express.png">
+<link rel="canonical" href="https://diagnostic.nova-ameublement.fr/express.html">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<!-- Polices hébergées sur le site (dossier fonts/) : aucune requête vers Google, rien ne part chez un tiers -->
+<link rel="preload" href="fonts/cormorant-garamond-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/dm-sans-400.woff2" as="font" type="font/woff2" crossorigin>
 <noscript><style>[data-slot="start"]{display:none}</style></noscript>
 
 <!--
@@ -27,6 +38,8 @@
 
   Identité : vert NOVA (site nova-ameublement.fr) poussé vers la nuit, menthe
   pour les choix, Cormorant Garamond + DM Sans comme sur le site.
+  Fichiers à déposer à côté de cette page : fonts/ (polices), apercu-express.png
+  (image de partage), favicon.ico, favicon-32.png, apple-touch-icon.png.
   La scène (chambre vue de profil) se compose au fil des réponses : c'est le
   seul élément animé de la page, et il ne bouge qu'en réponse à un choix.
 
@@ -80,6 +93,12 @@ const CONSENT_DAYS = 180;                                          // le choix e
 
 <style>
 /* ===== 2. DESIGN / CSS ===================================================== */
+/* Polices (licence SIL Open Font License, fichiers dans fonts/) */
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/cormorant-garamond-500.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/cormorant-garamond-600.woff2) format("woff2")}
+@font-face{font-family:"DM Sans";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/dm-sans-400.woff2) format("woff2")}
+@font-face{font-family:"DM Sans";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/dm-sans-500.woff2) format("woff2")}
+@font-face{font-family:"DM Sans";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/dm-sans-600.woff2) format("woff2")}
 :root{
   --nuit:#04322A;      /* fond : le vert NOVA, de nuit */
   --salle:#0B4C3D;     /* mur de la scène, surfaces */
